@@ -65,7 +65,7 @@ Copyright © 2017 block.one
   - [模式定义数据库](#模式定义数据库)
   - [分离授权与应用](#分离授权与应用)
   - [虚拟机独立架构](#虚拟机独立架构) 
-    - [Web组建](#Web组建)
+    - [WebAssembly](#WebAssembly)
     - [以太访虚拟机EVM](#以太访虚拟机EVM)
 - [跨链通信](#跨链通信) 
   - [用于轻客户端的Merkle证明](#用于轻客户端的Merkle证明)
@@ -273,9 +273,10 @@ EOS.IO 软件提供给用户一种找回自己失窃密钥控制权的方式。 
 
 ## 自主最优调度
 
-EOS.IO 软件并不能为区块生产生者为任何其他帐户送达的任何信息负责。 每个区块生产者要对计算的发杂读和处理一个消息的时间自己进行主观上的预测。 这同时适用于用户生成的和脚本自动生成的交易。
+EOS.IO 软件并不能为区块生产生者为任何其他帐户送达的任何信息负责。每个区块生产者要对计算的发杂读和处理一个消息的时间自己进行主观上的预测。 这同时适用于用户生成的和脚本自动生成的交易。
 
-On a launched blockchain adopting the EOS.IO software, at a network level all transactions are billed a fixed computational bandwidth cost regardless of whether it took .01ms or a full 10 ms to execute it. 然而，每个单独的区块生产者要通过自己的算法来计算资源的消耗。 当一个区块生产者断定一个交易或者帐户消耗了不相称的大量的计算资源时，他们可以在生成自己的区块时拒绝该交易；但是，如果其他区块生产者认为交易是有效的，他们就仍需要处理交易。
+在运行 EOS.IO 区块链的网络层面，EOS.IO 系统处理的每一笔交易都有固定的计算带宽成本，不管它是耗时 0.01ms 还是 10 ms。但是，每个单独的区块生成者会使用它们自己的算法和度量来衡量资源使用。当一个区块生产者断定一个交易或者帐户消耗了不相称的大量的计算资源时，他们可以在生成自己的区块时拒绝该交易；但是，如果其他区块生产者认为交易是有效的，他就仍需要处理该交易。
+
 
 一般而言，只要一个区块生产者认为交易在资源使用限度内是有效的，那么其他区块生产者就也要接受，但可能交易传递给生产者就要花费 1 分钟。
 
@@ -332,38 +333,30 @@ EOS.IO 软件会奖励区块区块生成者一定数量的 token。token 的价�
 
 ## 块奖励
 
-每次生成一个块时，EOS.IO 软件都会奖励该区块生产者新的 token。所创建的 token 数量由所有区块生成者所公布的期望报酬的中位数决定。EOS.IO 软件可能会配置区块生成者所得奖励上限，以便让 token 的增长率不超过5%。
+每次生成一个块时，EOS.IO 软件都会奖励该区块生产者新的 token。所创建的 token 数量由所有区块生成者所公布的期望报酬的中位数决定。EOS.IO 软件可能会配置区块生成者所得奖励上限，以便让 token 的增长率不超过 5%。(猿哥注:目前2018-04-07最新规则是奖励 1% 的 token 给节点,另外 4% 留作其它用途)
 
 
 ## 社区效益应用
 
-In addition to electing block producers, pursuant to a blockchain based on the EOS.IO software, users can elect 3 community benefit applications also known as smart contracts. 这三个应用将接收至多一个按照配置百分比对应的 token 年供应量减去每年提供给区块生产者的 token 量。 这些智能合约将按照每个应用接收到的 token 持有者的票的比例对应的 token。 这些应用或者智能合约可以被 token 持有者选出的新的应用或智能合约所替代。
-
-
-除了加入以EOS.IO系统为基础的区块生成者团队，用户还可以选择3个社区福利应用，也称为智能合约。这3个应用程序最多能按配置的比例接收到每年的令牌配额减去已支付给区块生成者的部分。这些智能合约将根据每个应用程序从令牌持有者收到的选票比例来收取令牌。经选举的应用程序或智能合约可以由新当选的应用程序或令牌持有人的智能合约所替代。
-
-
-## Community Benefit Applications
-
-In addition to electing block producers, pursuant to a blockchain based on the EOS.IO software, users can elect 3 community benefit applications also known as smart contracts. These 3 applications will receive tokens of up to a configured percent of the token supply per annum minus the tokens that have been paid to block producers. These smart contracts will receive tokens proportional to the votes each application has received from token holders. The elected applications or smart contracts can be replaced by newly elected applications or smart contracts by token holders.
+除了加入基于 EOS.IO 软件的区块生成者团队，用户还可以选择 3 个社区福利应用，也称为智能合约。这三个应用将接收至多一个按照配置百分比对应的 token 年供应量减去每年提供给区块生产者的 token 量。 这些智能合约将按照每个应用接收到的 token 持有者的票的比例对应的 token。 这些应用或者智能合约可以被 token 持有者选出的新的应用或智能合约所替代。
 
 # 治理
 
-治理是人们在主观问题上达成共识的过程，而这无法完全用软件算法来捕获。 An EOS.IO software-based blockchain implements a governance process that efficiently directs the existing influence of block producers. 没有了定义好的治理流程，之前的区块链依赖临时的、非正式和常常充满争议的方式治理，直接导致不可预知的结果。
+治理是人们在主观问题上达成共识的过程，而这无法完全用软件算法来捕获。EOS.IO 软件实现了一个治理过程，有效地影响现有的区块生产者。 如果没有定义好的治理流程，之前区块链依赖临时的、非正式和常常充满争议的方式治理，将直接导致不可预知的结果。
 
-A blockchain based on the EOS.IO software recognizes that power originates with the token holders who delegate that power to the block producers. 区块生产者被授予有限的检查权威来冻结帐户，升级有缺陷的应用程序，对底层协议提出硬分叉的改进建议。
+在 EOS.IO 软件中，治理权是通过令牌持有者委托给区块生产者。区块生产者被授予有限的检查权威来冻结帐户，升级有缺陷的应用程序，对底层协议提出硬分叉的改进建议。
 
-Embedded into the EOS.IO software is the election of block producers. 在对区块链没有做任何变更之前他们必须认可它。 如果区块生产者拒绝 token 持有者所预期的变更他们就会被投出。 如果区块生产者未经 token 持有者的授权作出变更，其他的非生产、完整验证 (交易所等) 会拒绝这些变更。
+EOS.IO 软件的一部分是区块生产者的选举。在对区块链没有做任何变更之前他们必须认可它。 如果区块生产者拒绝 token 持有者所预期的变更他们就会被投出。 如果区块生产者未经 token 持有者的授权作出变更，其他的非生产、完整验证 (交易所等) 会拒绝这些变更。
 
 ## 冻结帐户
 
 有时一个智能合约的行为处于一种一场或不可预测的状态并且无法按照预期执行；另一些时候一个应用或帐户也许发现了一个可以销毁不可想像数量资源的漏洞。 当这些问题不可避免的发生时，区块生产者有能力来扭转这一局面。
 
-所有区块链上的区块生产者都有能力来决定哪些交易被加到区块中，这给了他们冻结帐户的能力。 A blockchain using EOS.IO software formalizes this authority by subjecting the process of freezing an account to a 17/21 vote of active producers. 如果生产者滥用权利他们会被投出，而对应冻结帐户就将解冻。
+所有区块链上的区块生产者都有能力来决定哪些交易被加到区块中，这给了他们冻结帐户的能力。EOS.IO 软件冻结一个帐户时需要 17 / 21 活跃区块生产者的投票比例,才能正式冻结。如果生产者滥用权利他们会被淘汰，而对应冻结的帐户也会解冻。
+
 
 ## 更改帐户代码
-
-When all else fails and an "unstoppable application" acts in an unpredictable manner, a blockchain using EOS.IO software allows the block producers to replace the account's code without hard forking the entire blockchain. 与冻结一个帐户类似，更改帐户代码需要 17/21 这样的生产者票形。
+当其他一切都失败了，而“不可阻挡的应用程序”以一种不可预知的方式运行时，EOS.IO 软件允许区块生成者在不需要硬分叉整个区块链的情况下替换帐户的代码。与冻结帐户的过程类似，此代码的替换需要 17 / 21 的活跃被区块生产者投票。
 
 ## 宪法
 
@@ -373,13 +366,13 @@ EOS.IO 应用使得区块链创建了一个点对点的服务条款协议或者�
 
 ## 升级协议和宪法
 
-The EOS.IO software defines a process by which the protocol as defined by the canonical source code and its constitution, can be updated using the following process:
+EOS 软件使用权威的源代码定义宪法和协议，同时也定义了宪法及协议的更新方法。对宪法或协议进行变更，需完成以下步骤：
 
-  1. 区块生产者对宪法提出改建意见并获得 17/21 批准。
-  2. 区块生产者持续 17/21 品准连续 30 天。
+  1. 区块生产者对宪法提出改建意见并获得 17/21 赞成。
+  2. 区块生产者持续赞成达到 17/21 且连续 30 天。
   3. 所有用户需要使用新的宪法来做签名。
   4. 区块生产通过变更代码的方式来影响宪法并且提交一个 git 记录的哈希值。
-  5. 区块生产者持续 17/21 品准连续 30 天。
+  5. 区块生产者持续 17/21 赞成连续 30 天。
   6. 7 天后改为会起影响的代码，给所有完整节点 1 周时间在确认源码后进行升级。
   7. 所有未升级到最新代码的节点被自动关掉。
 
@@ -403,7 +396,7 @@ EOS.IO 首先会是一个平台用于协同用户间认证消息的传递。 脚
 
 ## 分离授权与应用
 
-To maximize parallelization opportunities and minimize the computational debt associated with regenerating application state from the transaction log, EOS.IO software separates validation logic into three sections:
+为了最大化并行运算，同时将从交易日志中重新生成应用程序状态的计算消耗降至最低，EOS.IO 软件将验证逻辑分为三个部分:
 
   1. 验证消息是否内部一致；
   2. 验证所有前提条件是否有效；
@@ -415,17 +408,18 @@ To maximize parallelization opportunities and minimize the computational debt as
 
 ## 虚拟机独立架构
 
-It is the intention of the EOS.IO software-based blockchain that multiple virtual machines can be supported and new virtual machines added over time as necessary. 因此，本文并不讨论任何特定的语言或者虚拟机。 That said, there are two virtual machines that are currently being evaluated for use with an EOS.IO software-based blockchain.
+EOS.IO 软件的目的是可以支持多种虚拟机，同时可以随着时间推移按需增加新的虚拟机。出于这个原因，本文不会讨论任何特定语言或虚拟机细节，但即便如此，目前也已经有两种虚拟机正在评估接入 EOS.IO 软件。
 
-### Web组建
+### WebAssembly
 
-网络组建是一种为了构建高性能的 web 应用而新兴的 web 标准。 只需要进行少量的更改 Web 组建就可以被制作为确定性的和沙盒化的。 Web 组建的好处是它有着广泛的产业支持并且它可以让智能合约使用熟知的语言进行开发，比如 C 或 C++。
+Web Assembly 是一种为了构建高性能的 Web 应用而新兴的 Web 标准。 只需要进行少量的更改 Web 组建就可以制作为确定性的和沙盒化的。 Web Assembly 的好处是它有着广泛的产业支持并且它可以让智能合约使用熟知的语言进行开发，比如 C 或 C++。
 
-以太访开发者已经开始更改 Web 组建来提供合适的沙盒与确定性在他们的[以太访式 Web 组建 (WASM)](https://github.com/ewasm/design)。 这种方式让 EOS.IO 很容易的与之适配和对接。
+以太访开发者已经开始更改 Web Assembly来提供合适的沙盒与确定性在他们的[以太访式 Web Assembly (WASM)](https://github.com/ewasm/design)。 这种方式让 EOS.IO 很容易地与之适配和对接。
 
 ### 以太访虚拟机EVM
 
-这个虚拟机已经被众多已有的智能合约所采用并且可以通过适配应用与 EOS.IO 区块链中。 It is conceivable that EVM contracts could be run within their own sandbox inside an EOS.IO software-based blockchain and that with some adaptation EVM contracts could communicate with other EOS.IO software blockchain applications.
+EVM 虚拟机已经众多智能合约所使用，EVM 也可以在 EOS.IO 软件中使用。在基于 EOS.IO 的区块链上，EVM 合约可以在内部沙箱中运行，只需要少量适配就可以与其它 EOS.IO 应用程序交互。
+
 
 # 跨链通信
 
@@ -451,7 +445,8 @@ EOS.IO 软件使得任何一个人只要他拥有包含交易所对应区块之�
 
 ## 跨链通信的延时
 
-当与外部区块链进行通信时，区块生产者必须等待直到 100% 确信一个交易已经被另一个区块链确认为不可逆后才会接收它成为一个有效的输入。 Using an EOS.IO software-based blockchain and DPOS with 3 second blocks and 21 producers, this takes approximately 45 seconds. If a chain's block producers do not wait for irreversibility it would be like an exchange accepting a deposit that was later reversed and could impact the validity of the blockchain's consensus.
+当与外部区块链进行通信时，区块生产者必须等待直到 100% 确信一个交易已经被另一个区块链确认为不可逆后才会接收它成为一个有效的输入。使用 EOS.IO 软件，凭借 3 秒出块时间及 21 个区块生产者的委托权益证明，这大概需要 45 秒的确认时间。如果区块链生产者不等到不可逆转就确认，就像一个交易所接受了一笔存款而后又撤销这笔操作，这会影响区块链共识的有效性。
+
 
 ## 完备性证明
 
